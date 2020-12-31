@@ -3,14 +3,14 @@ Video is taken as the input and location coordinates along with the obstacle is 
 
 ## Table of Contents - 
 * [About Project](#about-project)
-* [About Working](#about-working)
+* [About Working in Detailed Explanation](#about-working-in-detailed-explantion)
 * [About Me](#about-me)
 
 ## About Project
 * This project is the computer vision part which is aiming for the Obstalce detection on the moving video. It takes the input as the any downloaded video and it gives the bounding box of the obstacle in front of the person either in front of him/her OR on the left OR on the Right. 
 * When there is the space on the left then there is the indication to move Left, When there is the space on the right, then there is the indication that we can move to right, And when there is no space on Both of the side then to STOP!!
 
-## About Working
+## About Working in Detailed Explanation
 1. First to import necessary libraries (It is being given in the code provided). 
 2. Then we would be taking input as the video file 
     ```
@@ -72,4 +72,12 @@ Finally we would be defining the **categories and the categories index** into co
     return masked_image
     ```
     
- 8. TO BE CONTINUE...............:)
+ 8. We would be outputting the video using `cv2.VideoWriter` function. The parameter while defining the output is - `frame_width, frame_height, rows, cols, left_boundary, left_boundary_top, right_boundary, right_boundary_top, bottom_left, top_left, bottom_right, top_right, vertices`. Then we would be forming line on the image with the syntax - `cv2.line(image, start_point, end_point, color, thickness)` 
+     ```
+      cv2.line(frame,tuple(bottom_left),tuple(bottom_right), (255, 0, 0), 5)
+      cv2.line(frame,tuple(bottom_right),tuple(top_right), (255, 0, 0), 5)
+      cv2.line(frame,tuple(top_left),tuple(bottom_left), (255, 0, 0), 5)
+      cv2.line(frame,tuple(top_left),tuple(top_right), (255, 0, 0), 5)
+     ```
+     
+ 9. TO BE CONTINUE :) 
