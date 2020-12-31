@@ -29,3 +29,24 @@ Video is taken as the input and location coordinates along with the obstacle is 
 3. We would be using ```ssd_inception_v2_coco_2017_11_17``` as the model i.e **single shot multibox detector**. We would have faster RCNN, but Faster RCNN is accurate but its slow in compared to Single shot mulitbox detector. Then the model is stored as ``'.tar.gz'`` extension so that file is compressed and hence the file can be easily processed in ZIP format. Here we would be downloading the base tensorflow model for the further preprocessing. 
 
 4. Then we would be saving all the required things, i.e weight and graph in a single file for the easy acess. This process is known as freezing ```PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'``` and this is the actual model that is used for the object detection. We would be defining the number of classes as 10. Also List of the strings that is used to add correct label for each box - ```PATH_TO_LABELS = os.path.join('object_detection/data', 'mscoco_label_map.pbtxt')```.
+
+5. Then we would be creating the detection graph for each and every location. A Graph instance supports an arbitrary number of "collections" that are identified by name. For convenience when building a large graph, collections can store groups of related objects. With the File we would be **reading in the binary form**.
+    ```
+    detection_graph = tf.Graph()
+    with detection_graph.as_default():
+      od_graph_def = tf.GraphDef()
+      with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
+        serialized_graph = fid.read()
+        od_graph_def.ParseFromString(serialized_graph)
+        tf.import_graph_def(od_graph_def, name='')
+    ```
+Finally we would be defining the **categories and the categories index** into consideration for object detection. 
+
+6. Define input and output tensors (i.e. data) for the object detection classifier - Input tensor is the image and Output tensors are the detection boxes, scores, and classes. Each box represents a part of the image where a particular object was detected. Each score represents level of confidence for each of the objects. The score is shown on the result image, together with the class label. And at last we would be defining the number of objects detected. 
+    ```
+    image_tensor = detection_graph.get_tensor_by_name('image_tensor:0') ----------------------> Input Image
+    detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0') ----------------> Detection Box
+    detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')---------------> Detection Scores
+    detection_classes = detection_graph.get_tensor_by_name('detection_classes:0') ------------> Detection Class
+    num_detections = detection_graph.get_tensor_by_name('num_detections:0') ------------------> Number of objects detected.
+    ```
