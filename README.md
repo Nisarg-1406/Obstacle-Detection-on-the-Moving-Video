@@ -3,14 +3,14 @@ Video is taken as the input and location coordinates along with the obstacle is 
 
 ## Table of Contents - 
 * [About Project](#about-project)
-* [About Working in Detailed Explanation](#about-working-in-detailed-explantion)
+* [Detailed Explanation about Project](#about-working-in-detailed-explantion)
 * [About Me](#about-me)
 
 ## About Project
 * This project is the computer vision part which is aiming for the Obstalce detection on the moving video. It takes the input as the any downloaded video and it gives the bounding box of the obstacle in front of the person either in front of him/her OR on the left OR on the Right. 
 * When there is the space on the left then there is the indication to move Left, When there is the space on the right, then there is the indication that we can move to right, And when there is no space on Both of the side then to STOP!!
 
-## About Working in Detailed Explanation
+## Detailed Explanation about Project
 1. First to import necessary libraries (It is being given in the code provided). 
 2. Then we would be taking input as the video file 
     ```
@@ -80,4 +80,11 @@ Finally we would be defining the **categories and the categories index** into co
       cv2.line(frame,tuple(top_left),tuple(top_right), (255, 0, 0), 5)
      ```
      
- 9. TO BE CONTINUE :) 
+ 9. We would be defining the 4 parameters - `boxes, scores, classes, num` by ``(boxes, scores, classes, num) = sess.run([detection_boxes, detection_scores, detection_classes, num_detections], feed_dict={image_tensor: frame_expanded})``. We would be using np.squeeze - numpy.squeeze() function is used when we want to remove single-dimensional entries from the shape of an array in this line - `vis_util.visualize_boxes_and_labels_on_image_array(frame,np.squeeze(boxes),np.squeeze(classes).astype(np.int32),np.squeeze(scores),category_index,use_normalized_coordinates=True,line_thickness=8,min_score_thresh=0.78)`
+ 
+ 10. Then we would be finding the `ymin, ymax, xmin, xmax` that would be dimension of the bounding boxes in 3 dimension and in Y Coordinate we would be multiplying it with **frame width** and in X coordinate with **Frame Height** and all this value are in integer format.
+    ````ymin = int((boxes[0][0][0]*frame_width))
+    xmin = int((boxes[0][0][1]*frame_height))
+    ymax = int((boxes[0][0][2]*frame_width))
+    xmax = int((boxes[0][0][3]*frame_height))
+    Result = np.array(frame[ymin:ymax,xmin:xmax])````
