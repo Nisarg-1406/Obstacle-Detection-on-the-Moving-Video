@@ -3,7 +3,7 @@ Video is taken as the input and location coordinates along with the obstacle is 
 
 ## Table of Contents - 
 * [About Project](#about-project)
-* [Detailed Explanation about Project](#about-working-in-detailed-explantion)
+* [Detailed Explanation about Project](#detailed-explanation-about-project)
 * [About Me](#about-me)
 
 ## About Project
@@ -83,8 +83,46 @@ Finally we would be defining the **categories and the categories index** into co
  9. We would be defining the 4 parameters - `boxes, scores, classes, num` by ``(boxes, scores, classes, num) = sess.run([detection_boxes, detection_scores, detection_classes, num_detections], feed_dict={image_tensor: frame_expanded})``. We would be using np.squeeze - numpy.squeeze() function is used when we want to remove single-dimensional entries from the shape of an array in this line - `vis_util.visualize_boxes_and_labels_on_image_array(frame,np.squeeze(boxes),np.squeeze(classes).astype(np.int32),np.squeeze(scores),category_index,use_normalized_coordinates=True,line_thickness=8,min_score_thresh=0.78)`
  
  10. Then we would be finding the `ymin, ymax, xmin, xmax` that would be dimension of the bounding boxes in 3 dimension and in Y Coordinate we would be multiplying it with **frame width** and in X coordinate with **Frame Height** and all this value are in integer format.
-    ````ymin = int((boxes[0][0][0]*frame_width))
+    `ymin = int((boxes[0][0][0]*frame_width))
     xmin = int((boxes[0][0][1]*frame_height))
     ymax = int((boxes[0][0][2]*frame_width))
     xmax = int((boxes[0][0][3]*frame_height))
-    Result = np.array(frame[ymin:ymax,xmin:xmax])````
+    Result = np.array(frame[ymin:ymax,xmin:xmax])`
+    
+11. Now to put Text around the bounding boxes - **cv2.putText() method is used to draw a text string on any image** -> Syntax - `cv2.putText(image, 'TEXT', org, font,  fontScale, color, thickness)` 
+    ```
+    ymin_str='y min  = %.2f '%(ymin)
+    ymax_str='y max  = %.2f '%(ymax)
+    xmin_str='x min  = %.2f '%(xmin)
+    xmax_str='x max  = %.2f '%(xmax)
+    cv2.putText(frame,ymin_str, (50, 50),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2) -----> ymin
+    cv2.putText(frame,ymax_str, (50, 70),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2) -----> ymax
+    cv2.putText(frame,xmin_str, (50, 90),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2) -----> xmin
+    cv2.putText(frame,xmax_str, (50, 110),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,0,0),2) ----> xmax
+    ```
+    
+12. Next is to simply print the output.
+    ```
+    if scores.max() > 0.78:
+         print("inif")
+    if(xmin >= left_boundary[0]):
+      print("move LEFT - 1st !!!")
+      cv2.putText(frame,'Move LEFT!', (300, 100),cv2.FONT_HERSHEY_SIMPLEX,1.5,(0,255,0),2)
+    elif(xmax <= right_boundary[0]):
+      print("move Right - 2nd !!!")
+      cv2.putText(frame,'Move RIGHT!', (300, 100),cv2.FONT_HERSHEY_SIMPLEX,1.5,(0,255,0),2)
+    elif(xmin <= left_boundary[0] and xmax >= right_boundary[0]):
+      print("STOPPPPPP !!!! - 3nd !!!")
+      cv2.putText(frame,' STOPPPPPP!!!', (300, 100),cv2.FONT_HERSHEY_SIMPLEX,1.5,(0,255,0),2)
+    cv2.line(frame,tuple(left_boundary),tuple(left_boundary_top), (255, 0, 0), 5)
+    cv2.line(frame,tuple(right_boundary),tuple(right_boundary_top), (255, 0, 0), 5)
+    out.write(frame)
+    ```
+    
+ ## About Me
+I am Solving **Algorithms and Data Structure Problems from more than 210 Days Without any off-Day and have solved more than 400 Questions on various topics**.
+You can Visit my Profile of LeetCode here - **https://leetcode.com/Nisarg1406/**
+
+I am good at Algorithms and Data structure and I have good Projects in Machine learning and Deep Learning (Computer Vision). **I am and would be posting the detialed explantion of each and every project working**. I am activily looking for an Internhip in **Software development enginering (SDE) Domain and Machine learning Domain**.
+
+You can contact me on my mail ID - nisarg.mehta18@vit.edu OR nisargmehta2000@gmail.com and even Contact me on LinkedIn - https://www.linkedin.com/in/nisarg-mehta-4a378a185/
